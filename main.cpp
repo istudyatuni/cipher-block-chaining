@@ -39,15 +39,15 @@ public:
     }
     
 };
-class Gamma {
+class Chain {
     int256 key;
 public:
-    Gamma(int256 key): key{key}{}
+    Chain(int256 key): key{key}{}
     Data& encrypt(Data& text, ullong iv) {
         Magma alg(key);
         for (int i = 0; i < text.getSize(); ++i) {
-            iv = alg.crypt(iv);
-            text.set(text.get(i) ^ iv, i);
+            iv = alg.crypt(text.get(i) ^ iv);
+            text.set(iv, i);
         }
         return text;
     }
@@ -65,7 +65,7 @@ int main() {
     int256 key(0xffeeddccbbaa9988, 0x7766554433221100, 0xf0f1f2f3f4f5f6f7, 0xf8f9fafbfcfdfeff);
     ullong iv = 0xff6554f5f6f78f9f;
 
-    Gamma message(key);
+    Chain message(key);
     testText = message.encrypt(testText, iv);
     testText.print("encrypted");
     testText = message.decrypt(testText, iv);
