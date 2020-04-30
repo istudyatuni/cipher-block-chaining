@@ -1,5 +1,4 @@
 #include <vector>
-#include <iostream>
 #include "magma.h"
 using std::vector;
 using std::cout;
@@ -46,7 +45,7 @@ public:
     Data& encrypt(Data& text, ullong iv) {
         Magma alg(key);
         for (int i = 0; i < text.getSize(); ++i) {
-            iv = alg.crypt(text.get(i) ^ iv);
+            iv = alg.encrypt(text.get(i) ^ iv);
             text.set(iv, i);
         }
         return text;
@@ -56,7 +55,7 @@ public:
         ullong tmp;
         for (int i = 0; i < text.getSize(); ++i) {
             tmp = text.get(i);
-            text.set(iv ^ alg.crypt(text.get(i)), i);
+            text.set(iv ^ alg.decrypt(text.get(i)), i);
             iv = tmp;
         }
         return text;
