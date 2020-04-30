@@ -52,7 +52,14 @@ public:
         return text;
     }
     Data& decrypt(Data& text, ullong iv) {
-        return encrypt(text, iv);
+        Magma alg(key);
+        ullong tmp;
+        for (int i = 0; i < text.getSize(); ++i) {
+            tmp = text.get(i);
+            text.set(iv ^ alg.crypt(text.get(i)), i);
+            iv = tmp;
+        }
+        return text;
     }
 };
 
