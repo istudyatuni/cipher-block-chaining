@@ -44,6 +44,7 @@ public:
     Chain(int256 key): key{key}{}
     Data& encrypt(Data& text, ullong iv) {
         Magma alg(key);
+        Magma::setDecrypt();
         for (int i = 0; i < text.getSize(); ++i) {
             iv = alg.encrypt(text.get(i) ^ iv);
             text.set(iv, i);
@@ -52,6 +53,7 @@ public:
     }
     Data& decrypt(Data& text, ullong iv) {
         Magma alg(key);
+        Magma::setEncrypt();
         ullong tmp;
         for (int i = 0; i < text.getSize(); ++i) {
             tmp = text.get(i);
@@ -61,7 +63,7 @@ public:
         return text;
     }
 };
-
+int Magma::mode;
 int main() {
     cout << std::hex;
 
